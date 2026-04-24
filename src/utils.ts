@@ -64,6 +64,55 @@ export const colorHarmonyDatabase: ColorRule[] = [
     bottom: ["beige", ...denimColors],
     outerwear: ["none"]
   },
+  {
+    name: "🌊 남자 여름 릴렉스 캐주얼", description: "가볍고 편안한 티셔츠와 베이직 하의로 여름을 시원하게 즐기는 기본 캐주얼 룩입니다.",
+    gender: 'male', mode: 'two-piece', seasons: ['summer'],
+    top: ["white", "gray", "navy", "beige", "black"], topTypes: ['t-shirt'], topPatterns: ['solid'],
+    bottom: ["denim", "beige", "khaki", "white", "gray"],
+    outerwear: ["none"]
+  },
+  {
+    name: "🏄 남자 여름 서프 캐주얼", description: "라이트한 색상과 데님의 조합으로 자유롭고 시원한 여름 서퍼 감성의 룩입니다.",
+    gender: 'male', mode: 'two-piece', seasons: ['summer'],
+    top: ["white", "light-blue", "beige", "olive"], topTypes: ['t-shirt', 'shirt'], topPatterns: ['solid', 'stripe'],
+    bottom: ["light-denim", "denim", "beige", "khaki", "white"],
+    outerwear: ["none"]
+  },
+  {
+    name: "🧣 남자 겨울 니트 레이어링", description: "두툼한 니트와 코트의 레이어링으로 겨울의 볼륨감과 따뜻한 무드를 동시에 살렸습니다.",
+    gender: 'male', mode: 'two-piece', seasons: ['winter'],
+    top: ["gray", "beige", "navy", "white", "brown"], topTypes: ['knit'], topPatterns: ['solid'],
+    bottom: ["black", "gray", "dark-denim", "navy", "beige"],
+    outerwear: ["navy", "gray", "black", "brown", "beige"]
+  },
+  {
+    name: "🧥 남자 베이지 코트 클래식", description: "베이지 코트와 깔끔한 이너의 조합으로 세련되고 품격 있는 겨울 신사 룩을 완성합니다.",
+    gender: 'male', mode: 'two-piece', seasons: ['winter'],
+    top: ["white", "navy", "brown", "beige", "gray"], topTypes: ['knit', 'shirt'], topPatterns: ['solid'],
+    bottom: ["gray", "beige", "dark-denim", "black", "navy"],
+    outerwear: ["beige"]
+  },
+  {
+    name: "🖤 남자 다크 겨울 레이어링", description: "블랙과 다크 컬러의 조합으로 카리스마 있고 강렬한 겨울 룩을 완성합니다.",
+    gender: 'male', mode: 'two-piece', seasons: ['winter'],
+    top: ["black", "white", "gray"], topTypes: ['knit', 't-shirt'], topPatterns: ['solid'],
+    bottom: ["black", "dark-denim", "black-denim", "gray"],
+    outerwear: ["black", "black-leather", "navy", "gray"]
+  },
+  {
+    name: "🍂 남자 브라운 어스 톤 겨울", description: "브라운 계열의 어스 톤으로 따뜻하고 빈티지한 겨울 감성을 완성합니다.",
+    gender: 'male', mode: 'two-piece', seasons: ['winter'],
+    top: ["beige", "white", "brown", "khaki"], topTypes: ['knit', 'shirt'], topPatterns: ['solid', 'check'],
+    bottom: ["beige", "brown", "dark-denim", "khaki"],
+    outerwear: ["brown", "brown-leather", "khaki", "olive"]
+  },
+  {
+    name: "🌿 남자 카키 아우터 밀리터리", description: "카키 자켓과 어스톤 컬러의 조합으로 강인하고 실용적인 밀리터리 감성의 룩입니다.",
+    gender: 'male', mode: 'two-piece', seasons: ['spring-fall'],
+    top: ["white", "black", "beige", "olive"], topTypes: ['t-shirt', 'shirt'], topPatterns: ['solid'],
+    bottom: ["black", "denim", "beige", "khaki", "olive"],
+    outerwear: ["khaki", "olive"]
+  },
 
   // --- Female two-piece ---
   {
@@ -99,6 +148,69 @@ export const colorHarmonyDatabase: ColorRule[] = [
     top: ["beige", "white", "black"], bottom: ["khaki", "olive", "beige", ...denimColors],
     outerwear: ["brown", "black", "khaki", "olive"]
   },
+  {
+    name: "🧤 여자 겨울 코지 니트 룩", description: "부드러운 니트와 따뜻한 아우터로 포근하면서도 여성스러운 겨울 코지 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['winter'],
+    top: ["white", "beige", "pink", "gray", "navy"], topTypes: ['knit'], topPatterns: ['solid'],
+    bottom: ["black", "beige", "dark-denim", "navy", "gray"],
+    outerwear: ["beige", "gray", "brown", "black", "navy"]
+  },
+  {
+    name: "🖤 여자 블랙 레더 시크", description: "블랙 레더 자켓과 페미닌한 이너의 대비로 시크하고 강렬한 여성 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['spring-fall', 'winter'],
+    top: ["white", "black", "gray", "beige"], topTypes: ['t-shirt', 'knit', 'shirt'], topPatterns: ['solid'],
+    bottom: ["black", "dark-denim", "denim", "gray"],
+    outerwear: ["black-leather"]
+  },
+  {
+    name: "🔴 여자 레드 포인트 캐주얼", description: "레드 상의로 포인트를 준 활기차고 개성 있는 여성 캐주얼 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["red"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid'],
+    bottom: ["black", "white", "navy", "denim", "gray"],
+    outerwear: ["black", "none", "white", "navy"]
+  },
+  {
+    name: "🌿 여자 그린 포인트 캐주얼", description: "그린 상의로 개성을 살린 내추럴하고 세련된 여성 포인트 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['spring-fall'],
+    top: ["green"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid'],
+    bottom: ["black", "white", "beige", "denim", "khaki"],
+    outerwear: ["black", "none", "beige", "khaki"]
+  },
+  {
+    name: "🌸 여자 로맨틱 봄 레이어링", description: "밝고 화사한 톤의 레이어링으로 봄의 설레임을 담은 로맨틱한 여성 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['spring-fall'],
+    top: ["pink", "yellow", "white", "beige"], topTypes: ['shirt', 'knit', 't-shirt'], topPatterns: ['solid', 'gingham'],
+    bottom: ["white", "beige", "denim", "light-denim"],
+    outerwear: ["beige", "pink", "white", "none"]
+  },
+  {
+    name: "💙 여자 블루 데님 시크", description: "블루 계열 상의와 데님의 자연스러운 매치로 시원하고 캐주얼한 여성 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["blue", "light-blue", "navy"], topTypes: ['t-shirt', 'shirt'], topPatterns: ['solid', 'stripe'],
+    bottom: ["white", "beige", ...denimColors, "gray"],
+    outerwear: ["none", "white", "beige", "navy", "light-blue"]
+  },
+  {
+    name: "🌻 여자 옐로우 포인트 룩", description: "옐로우 상의로 생기 넘치는 포인트를 준 밝고 활기찬 여성 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["yellow"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid'],
+    bottom: ["white", "black", "navy", "denim", "beige"],
+    outerwear: ["none", "white", "beige", "black"]
+  },
+  {
+    name: "🩷 여자 핑크 자켓 걸리시", description: "핑크 자켓으로 여성스러움과 트렌디함을 동시에 살린 사랑스러운 걸리시 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['spring-fall'],
+    top: ["white", "beige", "pink", "gray"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid'],
+    bottom: ["white", "beige", "denim", "gray", "black"],
+    outerwear: ["pink"]
+  },
+  {
+    name: "❄️ 여자 겨울 화이트 룩", description: "겨울의 눈처럼 순백의 톤온톤으로 우아하고 청초한 분위기를 연출하는 여성 겨울 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['winter'],
+    top: ["white", "beige", "gray"], topTypes: ['knit', 'shirt'], topPatterns: ['solid'],
+    bottom: ["white", "beige", "gray", "black"],
+    outerwear: ["white", "beige", "gray"]
+  },
 
   // --- Female one-piece ---
   {
@@ -118,6 +230,30 @@ export const colorHarmonyDatabase: ColorRule[] = [
     gender: 'female', mode: 'one-piece', seasons: ['summer'],
     dress: ["white", "pink", "yellow", "blue", "navy"],
     outerwear: ["none"]
+  },
+  {
+    name: "🌺 비비드 컬러 원피스", description: "선명한 컬러 원피스로 자신감 있고 생동감 넘치는 페미닌 룩을 완성합니다.",
+    gender: 'female', mode: 'one-piece', seasons: ['spring-fall', 'summer'],
+    dress: ["red", "green", "yellow", "pink", "blue", "light-blue"],
+    outerwear: ["black", "white", "none", "beige"]
+  },
+  {
+    name: "🌙 이브닝 무드 원피스", description: "우아한 어두운 원피스와 시크한 아우터의 조합으로 격조 있는 이브닝 무드를 연출합니다.",
+    gender: 'female', mode: 'one-piece', seasons: ['spring-fall', 'winter'],
+    dress: ["black", "navy", "red", "gray"],
+    outerwear: ["black", "black-leather", "gray", "navy", "brown-leather"]
+  },
+  {
+    name: "🎀 파스텔 원피스 데이리 룩", description: "부드러운 파스텔 톤 원피스로 사랑스럽고 화사한 데일리 여성 룩을 완성합니다.",
+    gender: 'female', mode: 'one-piece', seasons: ['spring-fall', 'summer'],
+    dress: ["beige", "pink", "white", "gray"],
+    outerwear: ["beige", "white", "pink", "none"]
+  },
+  {
+    name: "🧥 원피스 & 데님 자켓", description: "원피스에 데님 자켓을 걸친 캐주얼하면서도 여성스러운 조합의 인기 데일리 룩입니다.",
+    gender: 'female', mode: 'one-piece', seasons: ['spring-fall', 'summer'],
+    dress: ["white", "beige", "navy", "black", "blue"],
+    outerwear: [...denimColors]
   },
 
   // --- Unisex ---
@@ -161,20 +297,164 @@ export const colorHarmonyDatabase: ColorRule[] = [
     gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'summer', 'winter'],
     top: availableColors,
     bottom: ["black", "white", "gray", ...denimColors, "beige"],
-    outerwear: ["black", "gray", "navy", "blue", "beige", "white", "none", "black-leather", "brown-leather"]
+    outerwear: ["black", "gray", "navy", "blue", "light-blue", "beige", "white", "none", "black-leather", "brown-leather"]
   },
   {
     name: "🎨 하의 포인트 매치",
     gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'summer', 'winter'],
     top: ["white", "black", "gray"],
     bottom: bottomColors,
-    outerwear: ["black", "gray", "navy", "blue", "none", "black-leather"]
+    outerwear: ["black", "gray", "navy", "blue", "light-blue", "none", "black-leather"]
   },
   {
     name: "🎨 원피스 매치",
     gender: 'female', mode: 'one-piece', seasons: ['spring-fall', 'summer', 'winter'],
     dress: availableColors,
     outerwear: ["black", "gray", "beige", "navy", "white", "none"]
+  },
+
+  // --- Colored outerwear statement rules ---
+  {
+    name: "🔴 레드 자켓 포인트 룩", description: "레드 자켓 하나로 전체 코디의 분위기를 바꾸는 강렬한 스테이트먼트 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall'],
+    top: ["white", "black", "gray", "navy"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid'],
+    bottom: ["black", "white", "gray", "navy", "denim"],
+    outerwear: ["red"]
+  },
+  {
+    name: "🌿 그린 자켓 어스 톤", description: "그린 자켓과 뉴트럴 컬러의 조합으로 자연스럽고 트렌디한 어스 톤 룩을 완성합니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall'],
+    top: ["white", "black", "beige", "gray", "brown"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid'],
+    bottom: ["black", "beige", "denim", "khaki", "white"],
+    outerwear: ["green"]
+  },
+  {
+    name: "🌻 옐로우 자켓 바이브 룩", description: "옐로우 자켓으로 포인트를 준 밝고 경쾌한 트렌디 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["white", "black", "gray", "navy"], topTypes: ['t-shirt', 'shirt'], topPatterns: ['solid'],
+    bottom: ["black", "white", "navy", "denim", "gray"],
+    outerwear: ["yellow"]
+  },
+  {
+    name: "🩶 그레이 자켓 미니멀 룩", description: "그레이 자켓의 차분하고 세련된 무드로 도시적이고 완성도 높은 미니멀 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'winter'],
+    top: ["white", "black", "gray", "navy", "beige"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid', 'stripe'],
+    bottom: ["gray", "black", "white", "navy", "dark-denim", "denim"],
+    outerwear: ["gray"]
+  },
+  {
+    name: "🌿 카키 자켓 밀리터리 룩", description: "카키 자켓과 뉴트럴 컬러의 조합으로 실용적이면서도 스타일리시한 밀리터리 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall'],
+    top: ["white", "black", "beige", "olive", "brown"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid', 'check'],
+    bottom: ["black", "denim", "beige", "khaki", "olive"],
+    outerwear: ["khaki"]
+  },
+  {
+    name: "🍃 올리브 자켓 내추럴 룩", description: "올리브 자켓과 어스 톤 컬러의 자연스러운 매치로 빈티지하고 캐주얼한 룩을 완성합니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'winter'],
+    top: ["white", "black", "beige", "brown", "khaki"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid', 'check'],
+    bottom: ["black", "denim", "khaki", "beige", "olive"],
+    outerwear: ["olive"]
+  },
+  {
+    name: "🤍 화이트 자켓 클린 룩", description: "화이트 자켓의 깔끔하고 경쾌한 무드로 어떤 계절에도 빛나는 클린핏 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["white", "navy", "black", "blue", "beige"], topTypes: ['t-shirt', 'shirt'], topPatterns: ['solid', 'stripe'],
+    bottom: ["white", "navy", "black", "denim", "beige", "gray"],
+    outerwear: ["white"]
+  },
+  {
+    name: "🎿 스포티 클린 룩", description: "편안하고 기능적인 스포티 무드로 데일리 캐주얼을 세련되게 완성하는 클린 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'summer', 'winter'],
+    top: ["white", "black", "gray", "navy"], topTypes: ['t-shirt'], topPatterns: ['solid'],
+    bottom: ["black", "white", "gray", "navy"],
+    outerwear: ["white", "gray", "navy", "black", "none"]
+  },
+  {
+    name: "🌻 그린 상의 내추럴 캐주얼", description: "그린 상의와 뉴트럴 컬러의 자연스러운 매치로 개성 있고 신선한 캐주얼 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["green"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid'],
+    bottom: ["black", "white", "beige", "khaki", "denim", "olive"],
+    outerwear: ["none", "black", "white", "khaki", "olive"]
+  },
+  {
+    name: "🌻 옐로우 상의 포인트 룩", description: "옐로우 상의로 생기 넘치는 포인트를 준 밝고 활기찬 유니섹스 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["yellow"], topTypes: ['t-shirt', 'shirt'], topPatterns: ['solid'],
+    bottom: ["black", "white", "navy", "denim", "gray", "beige"],
+    outerwear: ["none", "white", "black", "navy"]
+  },
+  {
+    name: "🔴 레드 상의 포인트 룩", description: "레드 상의로 강렬하고 자신감 있는 포인트를 준 개성 넘치는 스트릿 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["red"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid'],
+    bottom: ["black", "white", "navy", "denim", "gray"],
+    outerwear: ["none", "black", "navy", "white"]
+  },
+  {
+    name: "🏙️ 시티 블루 룩", description: "블루 계열을 중심으로 도시적이고 세련된 무드의 캐주얼 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["blue", "light-blue", "navy"], topTypes: ['t-shirt', 'shirt'], topPatterns: ['solid', 'stripe'],
+    bottom: ["white", "beige", "gray", "navy", ...denimColors],
+    outerwear: ["none", "white", "beige", "navy", "light-blue", "blue"]
+  },
+  {
+    name: "🤎 카멜 & 브라운 계열 레이어링", description: "따뜻한 카멜과 브라운 계열로 완성하는 세련되고 고급스러운 어스 톤 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'winter'],
+    top: ["white", "beige", "brown", "gray"], topTypes: ['knit', 'shirt', 't-shirt'], topPatterns: ['solid'],
+    bottom: ["beige", "brown", "gray", "black", "dark-denim"],
+    outerwear: ["brown", "beige", "brown-leather"]
+  },
+  {
+    name: "⚡ 블랙 레더 스트릿 룩", description: "블랙 레더 자켓의 강렬한 에너지로 완성하는 파워풀한 스트릿 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'winter'],
+    top: ["white", "black", "gray"], topTypes: ['t-shirt', 'knit'], topPatterns: ['solid', 'stripe'],
+    bottom: ["black", "dark-denim", "black-denim", "gray", "denim"],
+    outerwear: ["black-leather"]
+  },
+  {
+    name: "💎 그레이 온 그레이 모노톤", description: "다양한 명도의 그레이를 레이어링한 세련되고 모던한 모노톤 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'winter'],
+    top: ["gray", "white", "black"], topTypes: ['knit', 't-shirt', 'shirt'], topPatterns: ['solid'],
+    bottom: ["gray", "black", "white"],
+    outerwear: ["gray", "black", "white"]
+  },
+  {
+    name: "🌺 봄 파스텔 캐주얼", description: "파스텔 톤의 부드럽고 화사한 조합으로 봄의 설레임을 담은 상큼한 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["pink", "yellow", "light-blue", "beige", "white"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid'],
+    bottom: ["white", "beige", "light-denim", "denim", "gray"],
+    outerwear: ["none", "white", "beige", "pink", "light-blue"]
+  },
+  {
+    name: "🌑 다크 모노크롬 겨울", description: "짙은 다크 계열의 모노크롬으로 겨울의 시크함과 강렬함을 극대화한 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['winter'],
+    top: ["black", "gray", "navy"], topTypes: ['knit', 't-shirt', 'shirt'], topPatterns: ['solid'],
+    bottom: ["black", "dark-denim", "black-denim", "gray", "navy"],
+    outerwear: ["black", "navy", "gray", "black-leather"]
+  },
+  {
+    name: "🎓 아이비 클래식 룩", description: "아이비리그 감성의 단정하고 지적인 무드로 완성하는 아카데믹 클래식 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'winter'],
+    top: ["white", "blue", "light-blue", "beige"], topTypes: ['shirt', 'knit'], topPatterns: ['solid', 'stripe', 'check'],
+    bottom: ["beige", "navy", "gray", "brown", "khaki"],
+    outerwear: ["navy", "beige", "gray", "brown"]
+  },
+
+  // --- Light-blue outerwear ---
+  {
+    name: "🩵 연한블루 재킷 청량 룩", description: "연한블루 재킷 특유의 청량감이 봄·가을에 딱 맞는 감성적인 코디입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["white", "navy", "gray", "beige"], topTypes: ["t-shirt", "shirt"], topPatterns: ["solid", "stripe"],
+    bottom: ["white", "beige", "gray", "navy", ...denimColors],
+    outerwear: ["light-blue"]
+  },
+  {
+    name: "🩵 연한블루 재킷 페미닌", description: "파스텔톤 재킷으로 부드럽고 감각적인 여성스러운 무드를 완성합니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["white", "beige", "pink"], topTypes: ["t-shirt", "shirt", "knit"], topPatterns: ["solid"],
+    bottom: ["white", "beige", ...denimColors],
+    outerwear: ["light-blue"]
   },
 
   // --- Pattern specific rules ---
@@ -361,11 +641,11 @@ export const colorHarmonyDatabase: ColorRule[] = [
     outerwear: ["navy", "beige", "gray", "black", "brown", "none", "black-leather", "brown-leather"]
   },
   {
-    name: "소라색 셔츠 스마트 캐주얼",
+    name: "연한블루 셔츠 스마트 캐주얼",
     gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
     top: ["light-blue", "blue"], topTypes: ["shirt"], topPatterns: ["solid"],
     bottom: ["beige", "navy", "gray", "white", ...denimColors],
-    outerwear: ["navy", "beige", "gray", "none", ...denimColors]
+    outerwear: ["navy", "beige", "gray", "none", "light-blue", ...denimColors]
   },
   {
     name: "블랙 셔츠 모던룩",
