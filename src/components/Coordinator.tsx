@@ -717,6 +717,9 @@ const Coordinator: React.FC = () => {
   };
 
   const accentColor = selectedGender === 'female' ? '#ec4899' : 'var(--primary)';
+  const selectedRecommendationRowEnd = recommendationList.length > 0
+    ? Math.min(recommendationList.length - 1, Math.floor(selectedRecIndex / 3) * 3 + 2)
+    : -1;
 
   return (
     <div className="flex-col gap-6 animate-fade-in" style={{ padding: '0 0 24px', position: 'relative' }}>
@@ -959,7 +962,7 @@ const Coordinator: React.FC = () => {
                     {renderRecommendationColorSummary(rec)}
                   </div>
                 </div>
-                {selectedRecIndex === index && renderSelectedRecommendationPanel()}
+                {selectedRecommendationRowEnd === index && renderSelectedRecommendationPanel()}
               </React.Fragment>
             ))}
           </div>
