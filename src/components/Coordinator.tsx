@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Gender, OutfitMode, Season, SavedOutfit, TopType, TopPattern } from '../types';
 import { colorHarmonyDatabase, availableColors, denimColors, getColorHex } from '../utils';
 import Avatar from './Avatar';
@@ -16,6 +16,7 @@ interface RecommendationItem {
   outfit: OutfitState;
   ruleName: string;
   score: number;
+  description?: string;
 }
 
 type NoticeType = 'none' | 'fallback' | 'clash';
@@ -29,7 +30,7 @@ const Coordinator: React.FC = () => {
     outerwear: 'auto',
     top: 'auto',
     topType: 'auto',
-    topPattern: 'auto',
+    topPattern: 'solid',
     bottom: 'auto',
     dress: 'auto'
   });
@@ -375,7 +376,8 @@ const Coordinator: React.FC = () => {
                     comboList.push({ 
                       outfit: combo, 
                       ruleName: rule.name,
-                      score: calculateScore(combo, rule)
+                      score: calculateScore(combo, rule),
+                      description: rule.description
                     });
                   }
                 }
@@ -394,8 +396,8 @@ const Coordinator: React.FC = () => {
       return a.ruleName.localeCompare(b.ruleName);
     });
 
-    const visibleCombos = comboList.filter(item => toDisplayScore(item.score) >= 85);
-    const finalCombos = (visibleCombos.length > 0 ? visibleCombos : comboList).slice(0, 100); // Cap at 100 for performance
+    const visibleCombos = comboList.filter(item => toDisplayScore(item.score) >= 90); // Stricter threshold
+    const finalCombos = (visibleCombos.length > 0 ? visibleCombos : comboList).slice(0, 12); // Extremely curated: Max 12 options
 
     if (finalCombos.length === 0) {
       const fallbackCombos = createFallbackRecommendations();
@@ -533,23 +535,27 @@ const Coordinator: React.FC = () => {
     const colors = [currentOutfit.outerwear, currentOutfit.top, currentOutfit.bottom, currentOutfit.dress]
       .filter(color => color !== 'auto' && color !== 'none');
 
+    const avoid: string[] = [];
+
+    if (colors.includes('black') || colors.includes('black-leather') || colors.includes('black-denim')) {
+      avoid.push('갈색(브라운)', '화려한 원색(빨강, 초록)');
+    } else if (colors.includes('navy') || colors.includes('blue') || colors.some(isDenim)) {
+      avoid.push('형광색', '빨간색');
+    } else if (colors.includes('brown') || colors.includes('beige') || colors.includes('brown-leather') || colors.includes('khaki') || colors.includes('olive')) {
+      avoid.push('네이비/파란색 계열', '차가운 쿨톤 원색');
+    }
+
     if (selectedSeason === 'summer') {
-      return '신발 추천: 화이트 스니커즈, 베이지 샌들, 밝은 캔버스화가 잘 어울립니다.';
+      avoid.push('무거운 가죽 부츠나 워커');
+    } else if (selectedSeason === 'winter') {
+      avoid.push('얇은 캔버스화나 슬립온');
     }
 
-    if (colors.includes('black') || colors.includes('black-leather')) {
-      return '신발 추천: 블랙 로퍼, 블랙 첼시부츠, 미니멀한 블랙 스니커즈를 추천합니다.';
+    if (avoid.length > 0) {
+      return `❌ 피해야 할 신발: ${avoid.join(', ')} 등은 코디를 해칠 수 있습니다.`;
     }
 
-    if (colors.includes('brown') || colors.includes('brown-leather') || colors.includes('beige')) {
-      return '신발 추천: 브라운 로퍼, 베이지 스니커즈, 스웨이드 계열 신발이 자연스럽습니다.';
-    }
-
-    if (colors.some(isDenim) || colors.includes('navy') || colors.includes('blue')) {
-      return '신발 추천: 화이트 스니커즈, 네이비 캔버스화, 브라운 캐주얼화를 추천합니다.';
-    }
-
-    return '신발 추천: 화이트 스니커즈, 블랙 로퍼, 베이지 캐주얼화처럼 무난한 색상이 좋습니다.';
+    return '✨ 팁: 튀는 원색만 아니라면, 기본 색상(검정, 흰색 등)의 어떤 신발을 신어도 무난합니다!';
   };
 
   return (
@@ -636,7 +642,7 @@ const Coordinator: React.FC = () => {
                     onChange={(e) => handleSelect('topPattern', e.target.value)}
                     style={{ width: '100%', padding: '8px', borderRadius: '8px', background: 'var(--input-bg)', color: 'var(--text-main)', border: '1px solid var(--glass-border)' }}
                   >
-                    <option value="auto">Auto</option>
+                    
                     <option value="solid">무지</option>
                     <option value="stripe">스트라이프</option>
                     <option value="check">체크</option>

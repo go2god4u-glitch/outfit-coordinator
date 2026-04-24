@@ -21,6 +21,7 @@ export type Season = 'spring-fall' | 'summer' | 'winter';
 
 export interface ColorRule {
   name: string;
+  description?: string; // Magazine style description
   gender: Gender;
   seasons: Season[];
   top?: string[];
