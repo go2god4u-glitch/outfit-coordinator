@@ -39,7 +39,15 @@ const Coordinator: React.FC = () => {
   const [selectedGender, setSelectedGender] = useState<Gender>('male');
   const [outfitMode, setOutfitMode] = useState<OutfitMode>('two-piece');
   const [selectedSeason, setSelectedSeason] = useState<Season>('spring-fall');
-  const [scoreThreshold, setScoreThreshold] = useState<number>(85);
+  const [scoreThreshold, setScoreThreshold] = useState<number>(() => {
+    const saved = localStorage.getItem('coordi_scoreThreshold');
+    const parsed = saved ? Number(saved) : NaN;
+    return Number.isFinite(parsed) ? Math.min(99, Math.max(80, parsed)) : 85;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('coordi_scoreThreshold', String(scoreThreshold));
+  }, [scoreThreshold]);
 
   const [outfit, setOutfit] = useState<OutfitState>({
     outerwear: 'auto', top: 'auto', topType: 'auto', topPattern: 'solid',
