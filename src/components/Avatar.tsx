@@ -486,12 +486,11 @@ const Avatar: React.FC<AvatarProps> = ({ gender, mode, colors }) => {
       {/* Floor shadow */}
       <ellipse cx="100" cy="412" rx="60" ry="6" fill="url(#floorShadow)" />
 
-      {/* Female: shoulder-length back hair */}
+      {/* Female: shoulder-length back hair (kept aligned with the lowered head) */}
       {gender === 'female' && (
-        <g fill="url(#hairGlossF)">
+        <g fill="url(#hairGlossF)" transform="translate(0, 16)">
           <path d="M 72 28 C 64 50 60 80 64 110 C 66 122 70 128 76 128 L 84 126 C 82 100 80 60 86 40 Z" />
           <path d="M 128 28 C 136 50 140 80 136 110 C 134 122 130 128 124 128 L 116 126 C 118 100 120 60 114 40 Z" />
-          {/* Hair strands - texture */}
           <path d="M 70 50 Q 66 90 70 122" stroke={HAIR_HL} strokeWidth="0.6" fill="none" opacity="0.4" />
           <path d="M 130 50 Q 134 90 130 122" stroke={HAIR_HL} strokeWidth="0.6" fill="none" opacity="0.4" />
         </g>
@@ -505,51 +504,42 @@ const Avatar: React.FC<AvatarProps> = ({ gender, mode, colors }) => {
       {/* Outerwear */}
       {renderOuterwear()}
 
-      {/* Neck — overlaps the head bottom a few px so it never visually detaches at small sizes */}
-      {gender === 'male' ? (
-        <>
-          <path d="M 90 62 L 90 96 Q 100 102 110 96 L 110 62 Z" fill="url(#neckShade)" />
-          <path d="M 90 86 Q 100 96 110 86 L 110 96 Q 100 102 90 96 Z" fill={SKIN_DEEP} opacity="0.4" />
-          <path d="M 86 92 Q 100 98 114 92" stroke="rgba(0,0,0,0.18)" strokeWidth="0.6" fill="none" />
-        </>
-      ) : (
-        <>
-          <path d="M 92 58 L 92 92 Q 100 100 108 92 L 108 58 Z" fill="url(#neckShade)" />
-          <path d="M 92 78 Q 100 90 108 78 L 108 92 Q 100 100 92 92 Z" fill={SKIN_DEEP} opacity="0.4" />
-          <path d="M 88 88 Q 100 94 112 88" stroke="rgba(0,0,0,0.18)" strokeWidth="0.6" fill="none" />
-        </>
-      )}
+      {/* Short neck (visible ~12px) — head sits lower so they don't visually detach */}
+      <path d="M 91 80 L 91 100 Q 100 104 109 100 L 109 80 Z" fill="url(#neckShade)" />
+      <path d="M 91 92 Q 100 100 109 92 L 109 100 Q 100 104 91 100 Z" fill={SKIN_DEEP} opacity="0.4" />
+      <path d="M 87 96 Q 100 100 113 96" stroke="rgba(0,0,0,0.18)" strokeWidth="0.6" fill="none" />
 
-      {/* Simple round head */}
-      <circle cx="100" cy="44" r="24" fill="url(#faceShade)" />
+      {/* Head + hair + face — moved down 16px so the neck reads short */}
+      <g transform="translate(0, 16)">
+        {/* Round head */}
+        <circle cx="100" cy="44" r="24" fill="url(#faceShade)" />
 
-      {/* Hair - simple cap on top */}
-      {gender === 'male' ? (
-        <>
-          {/* Clean swept-back hair */}
-          <path d="M 78 40 Q 76 18 100 16 Q 124 18 122 40 Q 120 28 110 24 Q 100 20 90 24 Q 80 28 78 40 Z" fill="url(#hairGlossM)" />
-          <ellipse cx="100" cy="22" rx="14" ry="2.5" fill={HAIR_HL} opacity="0.5" />
-        </>
-      ) : (
-        <>
-          {/* Simple short bob */}
-          <path d="M 76 42 Q 72 14 100 12 Q 128 14 124 42 Q 124 52 120 58 L 116 54 Q 110 26 100 26 Q 90 26 84 54 L 80 58 Q 76 52 76 42 Z" fill="url(#hairGlossF)" />
-          <ellipse cx="100" cy="20" rx="16" ry="3" fill={HAIR_HL} opacity="0.5" />
-        </>
-      )}
+        {/* Hair */}
+        {gender === 'male' ? (
+          <>
+            <path d="M 78 40 Q 76 18 100 16 Q 124 18 122 40 Q 120 28 110 24 Q 100 20 90 24 Q 80 28 78 40 Z" fill="url(#hairGlossM)" />
+            <ellipse cx="100" cy="22" rx="14" ry="2.5" fill={HAIR_HL} opacity="0.5" />
+          </>
+        ) : (
+          <>
+            <path d="M 76 42 Q 72 14 100 12 Q 128 14 124 42 Q 124 52 120 58 L 116 54 Q 110 26 100 26 Q 90 26 84 54 L 80 58 Q 76 52 76 42 Z" fill="url(#hairGlossF)" />
+            <ellipse cx="100" cy="20" rx="16" ry="3" fill={HAIR_HL} opacity="0.5" />
+          </>
+        )}
 
-      {/* Simple dot eyes */}
-      <circle cx="91" cy="46" r="2" fill="#1a1208" />
-      <circle cx="109" cy="46" r="2" fill="#1a1208" />
-      <circle cx="91.6" cy="45.4" r="0.6" fill="white" />
-      <circle cx="109.6" cy="45.4" r="0.6" fill="white" />
+        {/* Eyes */}
+        <circle cx="91" cy="46" r="2" fill="#1a1208" />
+        <circle cx="109" cy="46" r="2" fill="#1a1208" />
+        <circle cx="91.6" cy="45.4" r="0.6" fill="white" />
+        <circle cx="109.6" cy="45.4" r="0.6" fill="white" />
 
-      {/* Soft blush */}
-      <ellipse cx="84" cy="54" rx="4" ry="2.5" fill="rgba(255,150,150,0.35)" />
-      <ellipse cx="116" cy="54" rx="4" ry="2.5" fill="rgba(255,150,150,0.35)" />
+        {/* Blush */}
+        <ellipse cx="84" cy="54" rx="4" ry="2.5" fill="rgba(255,150,150,0.35)" />
+        <ellipse cx="116" cy="54" rx="4" ry="2.5" fill="rgba(255,150,150,0.35)" />
 
-      {/* Simple smile */}
-      <path d="M 96 56 Q 100 59 104 56" fill="none" stroke="rgba(160,80,80,0.85)" strokeWidth="1.4" strokeLinecap="round" />
+        {/* Smile */}
+        <path d="M 96 56 Q 100 59 104 56" fill="none" stroke="rgba(160,80,80,0.85)" strokeWidth="1.4" strokeLinecap="round" />
+      </g>
     </svg>
   );
 };
