@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import type { Gender, OutfitMode, Season, SavedOutfit, TopType, TopPattern } from '../types';
+import type { Gender, OutfitMode, Season, SavedOutfit, TopType, TopPattern, WornEntry } from '../types';
 import { colorHarmonyDatabase, availableColors, denimColors, getColorHex } from '../utils';
 import Avatar from './Avatar';
 
@@ -64,8 +64,14 @@ const Coordinator: React.FC = () => {
   const [selectedRecIndex, setSelectedRecIndex] = useState<number>(0);
   const [noticeType, setNoticeType] = useState<NoticeType>('none');
   const [savedOutfits, setSavedOutfits] = useState<SavedOutfit[]>([]);
+  const [wornHistory, setWornHistory] = useState<WornEntry[]>([]);
+  const [todayMode, setTodayMode] = useState<boolean>(() => localStorage.getItem('coordi_todayMode') === '1');
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    localStorage.setItem('coordi_todayMode', todayMode ? '1' : '0');
+  }, [todayMode]);
 
   const showToast = (msg: string) => {
     if (toastTimer.current) clearTimeout(toastTimer.current);
@@ -213,7 +219,63 @@ const Coordinator: React.FC = () => {
   useEffect(() => {
     const saved = localStorage.getItem('styleSync_lookbook');
     if (saved) setSavedOutfits(JSON.parse(saved));
+    const worn = localStorage.getItem('coordi_wornHistory');
+    if (worn) {
+      try { setWornHistory(JSON.parse(worn)); } catch { /* ignore */ }
+    }
   }, []);
+
+  const makeOutfitKey = (gender: Gender, mode: OutfitMode, c: OutfitState | RecommendationItem['outfit']) => {
+    return [
+      gender, mode,
+      c.outerwear ?? 'auto',
+      c.top ?? 'auto',
+      c.topType ?? 'auto',
+      c.topPattern ?? 'auto',
+      c.bottom ?? 'auto',
+      c.dress ?? 'auto',
+    ].join('|');
+  };
+
+  const getDaysSinceWorn = (key: string): number | null => {
+    const entries = wornHistory.filter(e => e.key === key);
+    if (entries.length === 0) return null;
+    const latest = Math.max(...entries.map(e => e.wornAt));
+    return Math.floor((Date.now() - latest) / (1000 * 60 * 60 * 24));
+  };
+
+  const getWornPenalty = (days: number | null): number => {
+    if (days === null) return 0;
+    if (days <= 7) return 20;
+    if (days <= 21) return 10;
+    if (days <= 45) return 3;
+    return 0;
+  };
+
+  const markAsWorn = () => {
+    if (!recommended) return;
+    const key = makeOutfitKey(selectedGender, outfitMode, recommended);
+    const entry: WornEntry = {
+      id: Date.now().toString(),
+      key,
+      wornAt: Date.now(),
+      gender: selectedGender,
+      mode: outfitMode,
+      season: selectedSeason,
+      name: ruleName,
+      colors: { ...recommended },
+    };
+    const updated = [entry, ...wornHistory].slice(0, 200);
+    setWornHistory(updated);
+    localStorage.setItem('coordi_wornHistory', JSON.stringify(updated));
+    showToast('오늘 입은 옷으로 기록됐어요 👕');
+  };
+
+  const deleteWornEntry = (id: string) => {
+    const updated = wornHistory.filter(e => e.id !== id);
+    setWornHistory(updated);
+    localStorage.setItem('coordi_wornHistory', JSON.stringify(updated));
+  };
 
   const saveToLookbook = () => {
     if (!recommended) return;
@@ -464,18 +526,35 @@ const Coordinator: React.FC = () => {
       }
     }
 
-    comboList.sort((a, b) => {
+    // Apply "worn recently" penalty so previously worn outfits are pushed down
+    comboList.forEach(item => {
+      const days = getDaysSinceWorn(makeOutfitKey(selectedGender, outfitMode, item.outfit));
+      const penalty = getWornPenalty(days);
+      if (penalty > 0) item.score -= penalty;
+    });
+
+    // "오늘 뭐 입지" mode: hide combos worn within the last 14 days entirely
+    let workingCombos = comboList;
+    if (todayMode) {
+      workingCombos = comboList.filter(item => {
+        const days = getDaysSinceWorn(makeOutfitKey(selectedGender, outfitMode, item.outfit));
+        return days === null || days > 14;
+      });
+      if (workingCombos.length === 0) workingCombos = comboList; // graceful fallback
+    }
+
+    workingCombos.sort((a, b) => {
       const displayDiff = toDisplayScore(b.score) - toDisplayScore(a.score);
       if (displayDiff !== 0) return displayDiff;
       if (b.score !== a.score) return b.score - a.score;
       return a.ruleName.localeCompare(b.ruleName);
     });
 
-    const visibleCombos = comboList.filter(item => toDisplayScore(item.score) >= scoreThreshold);
-    const bestVisibleScore = toDisplayScore(comboList[0]?.score ?? 0);
+    const visibleCombos = workingCombos.filter(item => toDisplayScore(item.score) >= scoreThreshold);
+    const bestVisibleScore = toDisplayScore(workingCombos[0]?.score ?? 0);
     const finalCombos = visibleCombos.length > 0
       ? visibleCombos
-      : comboList.filter(item => toDisplayScore(item.score) === bestVisibleScore);
+      : workingCombos.filter(item => toDisplayScore(item.score) === bestVisibleScore);
 
     if (finalCombos.length === 0) {
       const fallbackCombos = createFallbackRecommendations();
@@ -654,14 +733,45 @@ const Coordinator: React.FC = () => {
               {ruleName}
             </div>
           </div>
-          <button
-            className="btn"
-            style={{ background: 'var(--glass-bg)', color: accentColor, padding: '8px 14px', border: `1px solid ${accentColor}`, borderRadius: '10px', fontSize: '0.85rem', flexShrink: 0 }}
-            onClick={saveToLookbook}
-          >
-            저장
-          </button>
+          <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+            <button
+              className="btn"
+              title="입었어요 - 날짜 기록 + 다음 추천에서 가중치 낮춤"
+              style={{ background: 'var(--glass-bg)', color: accentColor, padding: '8px 12px', border: `1px solid ${accentColor}`, borderRadius: '10px', fontSize: '0.82rem' }}
+              onClick={markAsWorn}
+            >
+              👕 입었어요
+            </button>
+            <button
+              className="btn"
+              title="좋아요 - 룩북에 영구 보관"
+              style={{ background: 'var(--glass-bg)', color: accentColor, padding: '8px 12px', border: `1px solid ${accentColor}`, borderRadius: '10px', fontSize: '0.82rem' }}
+              onClick={saveToLookbook}
+            >
+              🔖
+            </button>
+          </div>
         </div>
+        {(() => {
+          const days = getDaysSinceWorn(makeOutfitKey(selectedGender, outfitMode, recommended));
+          if (days === null) return null;
+          const label = days === 0 ? '오늘 입었어요' : `${days}일 전에 입었어요`;
+          return (
+            <div style={{
+              fontSize: '0.78rem',
+              color: 'var(--text-muted)',
+              background: 'var(--panel-item-bg)',
+              padding: '8px 12px',
+              borderRadius: '10px',
+              marginBottom: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}>
+              <span>🔁</span> <span>{label}</span>
+            </div>
+          );
+        })()}
 
         {ruleDescription && (
           <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '14px', padding: '10px 14px', background: 'var(--glass-bg)', borderRadius: '10px', borderLeft: `3px solid ${accentColor}` }}>
@@ -978,9 +1088,54 @@ const Coordinator: React.FC = () => {
               ))}
             </div>
           </div>
+
+          <button
+            type="button"
+            onClick={() => setTodayMode(v => !v)}
+            style={{
+              width: '100%',
+              marginTop: '10px',
+              padding: '12px 14px',
+              borderRadius: '12px',
+              border: todayMode ? `1.5px solid ${accentColor}` : '1px solid var(--glass-border)',
+              background: todayMode ? 'var(--gradient-soft)' : 'var(--glass-bg)',
+              color: 'var(--text-main)',
+              fontSize: '0.88rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '10px',
+              transition: 'all 0.18s ease',
+            }}
+            aria-pressed={todayMode}
+          >
+            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '1rem' }}>🆕</span>
+              <span>오늘 뭐 입지? 모드</span>
+            </span>
+            <span style={{
+              fontSize: '0.7rem',
+              fontWeight: 700,
+              padding: '3px 10px',
+              borderRadius: '999px',
+              background: todayMode ? accentColor : 'var(--panel-item-bg)',
+              color: todayMode ? 'white' : 'var(--text-muted)',
+              border: todayMode ? 'none' : '1px solid var(--glass-border)',
+            }}>
+              {todayMode ? 'ON' : 'OFF'}
+            </span>
+          </button>
+          <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '6px', paddingLeft: '4px', lineHeight: 1.5 }}>
+            {todayMode
+              ? '최근 14일 안에 입은 조합은 숨겨요.'
+              : '켜면 최근 14일 안에 입은 조합을 숨겨서 새로운 조합을 추천해요.'}
+          </p>
+
           <button
             className="btn"
-            style={{ width: '100%', padding: '16px', fontSize: '1.1rem', background: accentColor, borderRadius: '14px' }}
+            style={{ width: '100%', padding: '16px', fontSize: '1.1rem', background: accentColor, borderRadius: '14px', marginTop: '10px' }}
             onClick={handleRecommend}
           >
             <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1037,6 +1192,19 @@ const Coordinator: React.FC = () => {
                   }}>
                     {toDisplayScore(rec.score)}점
                   </div>
+                  {(() => {
+                    const d = getDaysSinceWorn(makeOutfitKey(selectedGender, outfitMode, rec.outfit));
+                    if (d === null) return null;
+                    return (
+                      <div style={{
+                        position: 'absolute', top: 4, left: 4, background: 'rgba(245,158,11,0.18)',
+                        padding: '2px 6px', borderRadius: '8px', fontSize: '0.58rem', fontWeight: 700,
+                        color: '#f59e0b', border: '1px solid rgba(245,158,11,0.4)', whiteSpace: 'nowrap',
+                      }}>
+                        🔁 {d === 0 ? '오늘' : `${d}일 전`}
+                      </div>
+                    );
+                  })()}
                   <div style={{ width: '100%', height: '96px' }}>
                     <Avatar gender={selectedGender} mode={outfitMode} colors={rec.outfit} />
                   </div>
@@ -1058,11 +1226,47 @@ const Coordinator: React.FC = () => {
         </div>
       )}
 
+      {/* 최근 입은 옷 - Worn history */}
+      {wornHistory.length > 0 && (
+        <div style={{ marginTop: '4px' }}>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, paddingLeft: '4px', marginBottom: '14px' }}>
+            👕 최근 입은 옷
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 400, marginLeft: '8px' }}>{wornHistory.length}회</span>
+          </h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '24px' }}>
+            {wornHistory.slice(0, 8).map(entry => {
+              const days = Math.floor((Date.now() - entry.wornAt) / (1000 * 60 * 60 * 24));
+              const dayLabel = days === 0 ? '오늘' : `${days}일 전`;
+              return (
+                <div key={entry.id} className="glass-panel" style={{ padding: '14px', position: 'relative' }}>
+                  <button
+                    style={{ position: 'absolute', top: '8px', right: '10px', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '1.1rem', lineHeight: 1, padding: '2px' }}
+                    onClick={() => deleteWornEntry(entry.id)}
+                    title="기록 삭제"
+                  >✕</button>
+                  <div style={{ height: '130px', marginBottom: '8px' }}>
+                    <Avatar gender={entry.gender} mode={entry.mode} colors={entry.colors} />
+                  </div>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 600, textAlign: 'center', marginBottom: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {entry.name || '직접 코디'}
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+                    <span style={{ fontSize: '0.65rem', color: '#f59e0b', background: 'rgba(245,158,11,0.12)', padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(245,158,11,0.3)', fontWeight: 700 }}>
+                      🔁 {dayLabel}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Lookbook Gallery */}
       {savedOutfits.length > 0 && (
         <div style={{ marginTop: '4px' }}>
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, paddingLeft: '4px', marginBottom: '14px' }}>
-            Lookbook Gallery
+            🔖 마음에 든 코디
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 400, marginLeft: '8px' }}>{savedOutfits.length}개</span>
           </h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>

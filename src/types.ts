@@ -33,6 +33,24 @@ export interface ColorRule {
   mode?: OutfitMode;
 }
 
+export interface WornEntry {
+  id: string;
+  key: string;
+  wornAt: number;
+  gender: Gender;
+  mode: OutfitMode;
+  season: Season;
+  name: string;
+  colors: {
+    outerwear: string;
+    top: string;
+    topType: TopType;
+    topPattern: TopPattern;
+    bottom: string;
+    dress: string;
+  };
+}
+
 export interface SavedOutfit {
   id: string;
   name: string;
