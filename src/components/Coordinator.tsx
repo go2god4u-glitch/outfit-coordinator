@@ -554,31 +554,35 @@ const Coordinator: React.FC = () => {
       }
     }
 
-    // Apply "worn recently" penalty so previously worn outfits are pushed down
+    // Compute a separate sortScore so that the displayed score stays as the
+    // matching rule's score, while the worn-recently penalty only pushes
+    // those combos down in ranking. The combos themselves are still kept in
+    // the result list — the recommendation card shows a "최근 입은 옷" badge.
+    const sortScores = new Map<RecommendationItem, number>();
     comboList.forEach(item => {
       const days = getDaysSinceWorn(makeOutfitKey(selectedGender, outfitMode, item.outfit));
-      const penalty = getWornPenalty(days);
-      if (penalty > 0) item.score -= penalty;
+      const basePenalty = getWornPenalty(days);
+      const boosted = todayMode && days !== null && days <= 14 ? Math.max(basePenalty, 25) : basePenalty;
+      sortScores.set(item, item.score - boosted);
     });
 
-    // "오늘 뭐 입지" mode: hide combos worn within the last 14 days entirely
-    let workingCombos = comboList;
-    if (todayMode) {
-      workingCombos = comboList.filter(item => {
-        const days = getDaysSinceWorn(makeOutfitKey(selectedGender, outfitMode, item.outfit));
-        return days === null || days > 14;
-      });
-      if (workingCombos.length === 0) workingCombos = comboList; // graceful fallback
-    }
+    const workingCombos = comboList;
 
     workingCombos.sort((a, b) => {
+      const sortDiff = (sortScores.get(b) ?? b.score) - (sortScores.get(a) ?? a.score);
+      if (sortDiff !== 0) return sortDiff;
       const displayDiff = toDisplayScore(b.score) - toDisplayScore(a.score);
       if (displayDiff !== 0) return displayDiff;
       if (b.score !== a.score) return b.score - a.score;
       return a.ruleName.localeCompare(b.ruleName);
     });
 
-    const visibleCombos = workingCombos.filter(item => toDisplayScore(item.score) >= scoreThreshold);
+    // Worn combos pass the score threshold even if their adjusted rank is low,
+    // so users still see them with the "최근 입은 옷" badge.
+    const visibleCombos = workingCombos.filter(item => {
+      const days = getDaysSinceWorn(makeOutfitKey(selectedGender, outfitMode, item.outfit));
+      return toDisplayScore(item.score) >= scoreThreshold || days !== null;
+    });
     const bestVisibleScore = toDisplayScore(workingCombos[0]?.score ?? 0);
     const finalCombos = visibleCombos.length > 0
       ? visibleCombos
@@ -1181,8 +1185,8 @@ const Coordinator: React.FC = () => {
           </button>
           <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '6px', paddingLeft: '4px', lineHeight: 1.5 }}>
             {todayMode
-              ? '최근 14일 안에 입은 조합은 숨겨요.'
-              : '켜면 최근 14일 안에 입은 조합을 숨겨서 새로운 조합을 추천해요.'}
+              ? '최근 14일 안에 입은 옷은 추천 순위를 크게 낮추고, 카드에 "최근 입은 옷" 표시가 떠요.'
+              : '켜면 최근 14일 안에 입은 옷을 뒤로 밀어내고 표시해 새로운 조합을 먼저 보여줘요.'}
           </p>
 
           <button
@@ -1247,14 +1251,34 @@ const Coordinator: React.FC = () => {
                   {(() => {
                     const d = getDaysSinceWorn(makeOutfitKey(selectedGender, outfitMode, rec.outfit));
                     if (d === null) return null;
+                    const recent = d <= 14;
                     return (
-                      <div style={{
-                        position: 'absolute', top: 4, left: 4, background: 'rgba(245,158,11,0.18)',
-                        padding: '2px 6px', borderRadius: '8px', fontSize: '0.58rem', fontWeight: 700,
-                        color: '#f59e0b', border: '1px solid rgba(245,158,11,0.4)', whiteSpace: 'nowrap',
-                      }}>
-                        🔁 {d === 0 ? '오늘' : `${d}일 전`}
-                      </div>
+                      <>
+                        <div style={{
+                          position: 'absolute', top: 4, left: 4,
+                          background: recent ? 'rgba(245,158,11,0.95)' : 'rgba(245,158,11,0.18)',
+                          padding: '3px 7px', borderRadius: '8px',
+                          fontSize: '0.6rem', fontWeight: 800,
+                          color: recent ? 'white' : '#f59e0b',
+                          border: '1px solid rgba(245,158,11,0.5)',
+                          whiteSpace: 'nowrap',
+                          boxShadow: recent ? '0 2px 8px rgba(245,158,11,0.4)' : 'none',
+                          zIndex: 1,
+                        }}>
+                          🔁 {d === 0 ? '오늘 입음' : `${d}일 전`}
+                        </div>
+                        {recent && (
+                          <div style={{
+                            position: 'absolute', bottom: 70, left: 0, right: 0,
+                            textAlign: 'center', fontSize: '0.58rem', fontWeight: 700,
+                            color: '#f59e0b', background: 'rgba(245,158,11,0.12)',
+                            padding: '2px 0', letterSpacing: '0.02em',
+                            pointerEvents: 'none',
+                          }}>
+                            최근 입은 옷
+                          </div>
+                        )}
+                      </>
                     );
                   })()}
                   <div style={{ width: '100%', height: '96px' }}>
