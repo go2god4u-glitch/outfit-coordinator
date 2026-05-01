@@ -244,6 +244,26 @@ const Coordinator: React.FC = () => {
     return Math.floor((Date.now() - latest) / (1000 * 60 * 60 * 24));
   };
 
+  const getLatestWornDate = (key: string): Date | null => {
+    const entries = wornHistory.filter(e => e.key === key);
+    if (entries.length === 0) return null;
+    return new Date(Math.max(...entries.map(e => e.wornAt)));
+  };
+
+  const formatWornDate = (d: Date): string => {
+    const days = ['일', '월', '화', '수', '목', '금', '토'];
+    return `${d.getMonth() + 1}월 ${d.getDate()}일 (${days[d.getDay()]})`;
+  };
+
+  const [expandedWornCards, setExpandedWornCards] = useState<Set<number>>(new Set());
+  const toggleWornExpand = (idx: number) => {
+    setExpandedWornCards(prev => {
+      const next = new Set(prev);
+      if (next.has(idx)) next.delete(idx); else next.add(idx);
+      return next;
+    });
+  };
+
   const getWornPenalty = (days: number | null): number => {
     if (days === null) return 0;
     if (days <= 7) return 20;
@@ -1267,17 +1287,29 @@ const Coordinator: React.FC = () => {
                         }}>
                           🔁 {d === 0 ? '오늘 입음' : `${d}일 전`}
                         </div>
-                        {recent && (
-                          <div style={{
-                            position: 'absolute', bottom: 70, left: 0, right: 0,
-                            textAlign: 'center', fontSize: '0.58rem', fontWeight: 700,
-                            color: '#f59e0b', background: 'rgba(245,158,11,0.12)',
-                            padding: '2px 0', letterSpacing: '0.02em',
-                            pointerEvents: 'none',
-                          }}>
-                            최근 입은 옷
-                          </div>
-                        )}
+                        {recent && (() => {
+                          const expanded = expandedWornCards.has(index);
+                          const dt = getLatestWornDate(makeOutfitKey(selectedGender, outfitMode, rec.outfit));
+                          return (
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); toggleWornExpand(index); }}
+                              aria-expanded={expanded}
+                              style={{
+                                position: 'absolute', bottom: 70, left: 0, right: 0,
+                                textAlign: 'center', fontSize: '0.6rem', fontWeight: 700,
+                                color: '#f59e0b', background: expanded ? 'rgba(245,158,11,0.22)' : 'rgba(245,158,11,0.12)',
+                                padding: '3px 4px',
+                                letterSpacing: '0.02em',
+                                border: 'none',
+                                cursor: 'pointer',
+                                transition: 'background 0.18s ease',
+                              }}
+                            >
+                              {expanded && dt ? formatWornDate(dt) : '최근 입은 옷 ▾'}
+                            </button>
+                          );
+                        })()}
                       </>
                     );
                   })()}
