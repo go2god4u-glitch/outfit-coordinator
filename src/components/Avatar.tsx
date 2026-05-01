@@ -505,12 +505,20 @@ const Avatar: React.FC<AvatarProps> = ({ gender, mode, colors }) => {
       {/* Outerwear */}
       {renderOuterwear()}
 
-      {/* Slim graceful neck */}
-      <path d="M 92 64 L 92 92 Q 100 100 108 92 L 108 64 Z" fill="url(#neckShade)" />
-      {/* Neck shadow */}
-      <path d="M 92 78 Q 100 90 108 78 L 108 92 Q 100 100 92 92 Z" fill={SKIN_DEEP} opacity="0.4" />
-      {/* Collarbone */}
-      <path d="M 88 88 Q 100 94 112 88" stroke="rgba(0,0,0,0.18)" strokeWidth="0.6" fill="none" />
+      {/* Neck — shorter and wider for male, slim and a touch longer for female */}
+      {gender === 'male' ? (
+        <>
+          <path d="M 90 72 L 90 96 Q 100 102 110 96 L 110 72 Z" fill="url(#neckShade)" />
+          <path d="M 90 86 Q 100 96 110 86 L 110 96 Q 100 102 90 96 Z" fill={SKIN_DEEP} opacity="0.4" />
+          <path d="M 86 92 Q 100 98 114 92" stroke="rgba(0,0,0,0.18)" strokeWidth="0.6" fill="none" />
+        </>
+      ) : (
+        <>
+          <path d="M 92 64 L 92 92 Q 100 100 108 92 L 108 64 Z" fill="url(#neckShade)" />
+          <path d="M 92 78 Q 100 90 108 78 L 108 92 Q 100 100 92 92 Z" fill={SKIN_DEEP} opacity="0.4" />
+          <path d="M 88 88 Q 100 94 112 88" stroke="rgba(0,0,0,0.18)" strokeWidth="0.6" fill="none" />
+        </>
+      )}
 
       {/* Simple round head */}
       <circle cx="100" cy="44" r="24" fill="url(#faceShade)" />

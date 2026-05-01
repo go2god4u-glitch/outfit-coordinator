@@ -1443,6 +1443,20 @@ const Coordinator: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Build version footer — bumps every push so users can verify deploys */}
+      <footer style={{
+        marginTop: '32px',
+        padding: '16px 4px',
+        textAlign: 'center',
+        fontSize: '0.68rem',
+        color: 'var(--text-muted)',
+        opacity: 0.7,
+        letterSpacing: '0.02em',
+        userSelect: 'all',
+      }}>
+        Coordi. · v{__APP_VERSION__} · {new Date(__BUILD_TIME__).toLocaleString('ko-KR', { year: '2-digit', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+      </footer>
     </div>
   );
 };
