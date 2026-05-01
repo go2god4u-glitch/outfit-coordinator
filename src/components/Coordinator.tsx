@@ -252,23 +252,37 @@ const Coordinator: React.FC = () => {
     return 0;
   };
 
-  const markAsWorn = () => {
+  const isWornToday = (key: string): boolean => {
+    const today = new Date().toDateString();
+    return wornHistory.some(e => e.key === key && new Date(e.wornAt).toDateString() === today);
+  };
+
+  const toggleWornToday = () => {
     if (!recommended) return;
     const key = makeOutfitKey(selectedGender, outfitMode, recommended);
-    const entry: WornEntry = {
-      id: Date.now().toString(),
-      key,
-      wornAt: Date.now(),
-      gender: selectedGender,
-      mode: outfitMode,
-      season: selectedSeason,
-      name: ruleName,
-      colors: { ...recommended },
-    };
-    const updated = [entry, ...wornHistory].slice(0, 200);
+    const today = new Date().toDateString();
+    const alreadyToday = wornHistory.some(e => e.key === key && new Date(e.wornAt).toDateString() === today);
+
+    let updated: WornEntry[];
+    if (alreadyToday) {
+      updated = wornHistory.filter(e => !(e.key === key && new Date(e.wornAt).toDateString() === today));
+      showToast('오늘 입음 기록을 취소했어요');
+    } else {
+      const entry: WornEntry = {
+        id: Date.now().toString(),
+        key,
+        wornAt: Date.now(),
+        gender: selectedGender,
+        mode: outfitMode,
+        season: selectedSeason,
+        name: ruleName,
+        colors: { ...recommended },
+      };
+      updated = [entry, ...wornHistory].slice(0, 200);
+      showToast('오늘 입은 옷으로 기록됐어요 👕');
+    }
     setWornHistory(updated);
     localStorage.setItem('coordi_wornHistory', JSON.stringify(updated));
-    showToast('오늘 입은 옷으로 기록됐어요 👕');
   };
 
   const deleteWornEntry = (id: string) => {
@@ -277,21 +291,35 @@ const Coordinator: React.FC = () => {
     localStorage.setItem('coordi_wornHistory', JSON.stringify(updated));
   };
 
-  const saveToLookbook = () => {
+  const isFavorited = (): boolean => {
+    if (!recommended) return false;
+    const key = makeOutfitKey(selectedGender, outfitMode, recommended);
+    return savedOutfits.some(o => makeOutfitKey(o.gender, o.mode, o.colors) === key);
+  };
+
+  const toggleFavorite = () => {
     if (!recommended) return;
-    const newOutfit: SavedOutfit = {
-      id: Date.now().toString(),
-      name: ruleName,
-      gender: selectedGender,
-      mode: outfitMode,
-      season: selectedSeason,
-      colors: { ...recommended },
-      createdAt: Date.now(),
-    };
-    const updated = [newOutfit, ...savedOutfits];
+    const key = makeOutfitKey(selectedGender, outfitMode, recommended);
+    const existing = savedOutfits.find(o => makeOutfitKey(o.gender, o.mode, o.colors) === key);
+    let updated: SavedOutfit[];
+    if (existing) {
+      updated = savedOutfits.filter(o => o.id !== existing.id);
+      showToast('마음에 든 코디에서 제거했어요');
+    } else {
+      const newOutfit: SavedOutfit = {
+        id: Date.now().toString(),
+        name: ruleName,
+        gender: selectedGender,
+        mode: outfitMode,
+        season: selectedSeason,
+        colors: { ...recommended },
+        createdAt: Date.now(),
+      };
+      updated = [newOutfit, ...savedOutfits];
+      showToast('마음에 든 코디에 저장했어요 🔖');
+    }
     setSavedOutfits(updated);
     localStorage.setItem('styleSync_lookbook', JSON.stringify(updated));
-    showToast('룩북에 저장됐습니다 ✓');
   };
 
   const deleteFromLookbook = (id: string) => {
@@ -733,24 +761,48 @@ const Coordinator: React.FC = () => {
               {ruleName}
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
-            <button
-              className="btn"
-              title="입었어요 - 날짜 기록 + 다음 추천에서 가중치 낮춤"
-              style={{ background: 'var(--glass-bg)', color: accentColor, padding: '8px 12px', border: `1px solid ${accentColor}`, borderRadius: '10px', fontSize: '0.82rem' }}
-              onClick={markAsWorn}
-            >
-              👕 입었어요
-            </button>
-            <button
-              className="btn"
-              title="좋아요 - 룩북에 영구 보관"
-              style={{ background: 'var(--glass-bg)', color: accentColor, padding: '8px 12px', border: `1px solid ${accentColor}`, borderRadius: '10px', fontSize: '0.82rem' }}
-              onClick={saveToLookbook}
-            >
-              🔖
-            </button>
-          </div>
+          {(() => {
+            const wornToday = recommended ? isWornToday(makeOutfitKey(selectedGender, outfitMode, recommended)) : false;
+            const fav = isFavorited();
+            return (
+              <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+                <button
+                  className="btn"
+                  title={wornToday ? '오늘 입음 기록 취소' : '입었어요 - 날짜 기록 + 다음 추천에서 가중치 낮춤'}
+                  aria-pressed={wornToday}
+                  style={{
+                    background: wornToday ? accentColor : 'var(--glass-bg)',
+                    color: wornToday ? 'white' : accentColor,
+                    padding: '8px 12px',
+                    border: `1px solid ${accentColor}`,
+                    borderRadius: '10px',
+                    fontSize: '0.82rem',
+                    transition: 'all 0.18s ease',
+                  }}
+                  onClick={toggleWornToday}
+                >
+                  {wornToday ? '✓ 입었음' : '👕 입었어요'}
+                </button>
+                <button
+                  className="btn"
+                  title={fav ? '마음에 든 코디에서 제거' : '마음에 든 코디로 저장'}
+                  aria-pressed={fav}
+                  style={{
+                    background: fav ? accentColor : 'var(--glass-bg)',
+                    color: fav ? 'white' : accentColor,
+                    padding: '8px 12px',
+                    border: `1px solid ${accentColor}`,
+                    borderRadius: '10px',
+                    fontSize: '0.82rem',
+                    transition: 'all 0.18s ease',
+                  }}
+                  onClick={toggleFavorite}
+                >
+                  {fav ? '🔖 저장됨' : '🔖'}
+                </button>
+              </div>
+            );
+          })()}
         </div>
         {(() => {
           const days = getDaysSinceWorn(makeOutfitKey(selectedGender, outfitMode, recommended));
