@@ -1292,9 +1292,29 @@ const Coordinator: React.FC = () => {
               return (
                 <div key={entry.id} className="glass-panel" style={{ padding: '14px', position: 'relative' }}>
                   <button
-                    style={{ position: 'absolute', top: '8px', right: '10px', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '1.1rem', lineHeight: 1, padding: '2px' }}
-                    onClick={() => deleteWornEntry(entry.id)}
+                    type="button"
+                    aria-label="기록 삭제"
                     title="기록 삭제"
+                    style={{
+                      position: 'absolute',
+                      top: '6px',
+                      right: '6px',
+                      width: '32px',
+                      height: '32px',
+                      background: 'var(--glass-bg-strong)',
+                      border: '1px solid var(--glass-border-strong)',
+                      color: 'var(--text-main)',
+                      cursor: 'pointer',
+                      fontSize: '0.95rem',
+                      lineHeight: 1,
+                      padding: 0,
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      zIndex: 2,
+                    }}
+                    onClick={(e) => { e.stopPropagation(); deleteWornEntry(entry.id); }}
                   >✕</button>
                   <div style={{ height: '130px', marginBottom: '8px' }}>
                     <Avatar gender={entry.gender} mode={entry.mode} colors={entry.colors} />
@@ -1325,8 +1345,28 @@ const Coordinator: React.FC = () => {
             {savedOutfits.map(saved => (
               <div key={saved.id} className="glass-panel" style={{ padding: '14px', position: 'relative' }}>
                 <button
-                  style={{ position: 'absolute', top: '8px', right: '10px', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '1.1rem', lineHeight: 1, padding: '2px' }}
-                  onClick={() => deleteFromLookbook(saved.id)}
+                  type="button"
+                  aria-label="삭제"
+                  style={{
+                    position: 'absolute',
+                    top: '6px',
+                    right: '6px',
+                    width: '32px',
+                    height: '32px',
+                    background: 'var(--glass-bg-strong)',
+                    border: '1px solid var(--glass-border-strong)',
+                    color: 'var(--text-main)',
+                    cursor: 'pointer',
+                    fontSize: '0.95rem',
+                    lineHeight: 1,
+                    padding: 0,
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 2,
+                  }}
+                  onClick={(e) => { e.stopPropagation(); deleteFromLookbook(saved.id); }}
                 >✕</button>
                 <div style={{ height: '150px', marginBottom: '10px', cursor: 'pointer' }} onClick={() => loadFromLookbook(saved)}>
                   <Avatar gender={saved.gender} mode={saved.mode} colors={saved.colors} />
