@@ -21,7 +21,7 @@ function App() {
   return (
     <>
       <header className="header">
-        <h1>Outfit Coordinator</h1>
+        <h1>Coordi.</h1>
         <button className="theme-toggle" type="button" onClick={toggleTheme} aria-label="Toggle theme">
           {theme === 'dark' ? 'Light' : 'Dark'}
         </button>

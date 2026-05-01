@@ -730,6 +730,93 @@ export const colorHarmonyDatabase: ColorRule[] = [
     top: availableColors, topTypes: ["shirt"], topPatterns: ["stripe", "check", "gingham"],
     bottom: ["black", "white", "gray", "navy", "beige", ...denimColors],
     outerwear: ["none", "black", "white", "gray", "navy", "beige"]
+  },
+
+  // ── Added: 여자 여름 룩 다양화 ──
+  {
+    name: "🌞 여자 썸머 화이트 미니멀", description: "화이트 상의에 가벼운 베이지·연청 하의로 완성하는 청량하고 깔끔한 여자 여름 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['summer'],
+    top: ["white"], topTypes: ["t-shirt", "shirt"], topPatterns: ["solid", "stripe"],
+    bottom: ["beige", "white", "khaki", "light-denim", "denim"],
+    outerwear: ["none"]
+  },
+  {
+    name: "🌴 여자 트로피컬 비비드 여름", description: "그린·옐로우·핑크 같은 비비드 컬러 상의로 활기를 더한 여름 휴가 무드 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['summer'],
+    top: ["green", "yellow", "pink", "light-blue"], topTypes: ["t-shirt", "shirt"], topPatterns: ["solid"],
+    bottom: ["white", "beige", "light-denim", "denim", "khaki"],
+    outerwear: ["none"]
+  },
+  {
+    name: "🥥 여자 베이지 톤온톤 미니멀", description: "베이지·아이보리 톤온톤으로 완성한 차분하고 고급스러운 데일리 미니멀 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['spring-fall', 'summer', 'winter'],
+    top: ["beige", "white"], topTypes: ["t-shirt", "shirt", "knit"], topPatterns: ["solid"],
+    bottom: ["beige", "khaki", "white"],
+    outerwear: ["none", "beige", "brown", "white"]
+  },
+  {
+    name: "💼 여자 블랙 오피스 시크", description: "블랙과 그레이의 모던한 매치로 단정하면서도 시크한 오피스 무드의 여성 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['spring-fall', 'winter'],
+    top: ["white", "black", "gray", "beige"], topTypes: ["shirt", "knit"], topPatterns: ["solid"],
+    bottom: ["black", "gray", "navy"],
+    outerwear: ["black", "gray", "navy", "beige"]
+  },
+  {
+    name: "🖤 여자 올블랙 미니멀 시크", description: "머리부터 발끝까지 블랙으로 통일한 카리스마 있는 여자 미니멀 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['spring-fall', 'winter'],
+    top: ["black"], topTypes: ["t-shirt", "shirt", "knit"], topPatterns: ["solid"],
+    bottom: ["black", "black-denim"],
+    outerwear: ["black", "black-leather", "gray", "none"]
+  },
+  {
+    name: "🧥 여자 카멜 코트 우아 룩", description: "카멜 톤 코트와 깔끔한 이너의 매치로 우아하고 고급스러운 여자 겨울 룩을 완성합니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['winter'],
+    top: ["white", "beige", "black", "gray"], topTypes: ["knit", "shirt"], topPatterns: ["solid"],
+    bottom: ["beige", "black", "gray", "navy", "denim"],
+    outerwear: ["brown", "beige"]
+  },
+
+  // ── Added: 남자 룩 다양화 ──
+  {
+    name: "🤍 남자 올화이트 클린 룩", description: "화이트와 라이트 톤으로 완성한 깔끔하고 청량한 클린핏 남자 룩입니다.",
+    gender: 'male', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["white", "light-blue", "beige"], topTypes: ["t-shirt", "shirt"], topPatterns: ["solid", "stripe"],
+    bottom: ["white", "beige", "light-denim"],
+    outerwear: ["none", "white", "beige", "light-denim"]
+  },
+  {
+    name: "🍒 남자 핑크 셔츠 포인트", description: "핑크 셔츠로 부드러운 포인트를 준 트렌디하고 감각적인 남자 캐주얼 룩입니다.",
+    gender: 'male', mode: 'two-piece', seasons: ['spring-fall', 'summer'],
+    top: ["pink"], topTypes: ["shirt", "t-shirt"], topPatterns: ["solid", "stripe"],
+    bottom: ["white", "beige", "navy", "gray", "denim", "light-denim"],
+    outerwear: ["none", "navy", "white", "beige", "gray"]
+  },
+  {
+    name: "⛵ 남자 마린 화이트 여름", description: "화이트 베이스에 네이비 스트라이프로 완성한 시원하고 클래식한 마린 무드 남자 여름 룩입니다.",
+    gender: 'male', mode: 'two-piece', seasons: ['summer'],
+    top: ["white", "navy", "light-blue"], topTypes: ["t-shirt", "shirt"], topPatterns: ["stripe", "solid"],
+    bottom: ["white", "beige", "navy", "light-denim"],
+    outerwear: ["none"]
+  },
+
+  // ── Added: 원피스 다양화 ──
+  {
+    name: "🌻 옐로우 썸머 원피스", description: "옐로우 원피스로 햇살처럼 화사한 무드를 담은 산뜻한 여름 데일리 룩입니다.",
+    gender: 'female', mode: 'one-piece', seasons: ['summer'],
+    dress: ["yellow"],
+    outerwear: ["none", "white", "beige"]
+  },
+  {
+    name: "🍃 그린 봄 원피스 페미닌", description: "그린 톤 원피스와 베이지 아우터로 봄의 싱그러움을 담은 페미닌 룩입니다.",
+    gender: 'female', mode: 'one-piece', seasons: ['spring-fall'],
+    dress: ["green"],
+    outerwear: ["none", "beige", "white", "denim", "light-denim"]
+  },
+  {
+    name: "🤍 화이트 원피스 + 데님 자켓", description: "순수한 화이트 원피스에 데님 자켓을 매치한 사랑스럽고 캐주얼한 데일리 룩입니다.",
+    gender: 'female', mode: 'one-piece', seasons: ['spring-fall', 'summer'],
+    dress: ["white"],
+    outerwear: ["denim", "light-denim", "none", "beige"]
   }
 ];
 

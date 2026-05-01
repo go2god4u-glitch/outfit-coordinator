@@ -774,19 +774,6 @@ const Coordinator: React.FC = () => {
         </div>
       )}
 
-      {/* Avatar */}
-      <div className="glass-panel animate-fade-in" style={{ padding: '12px', height: '360px', display: 'flex', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: 12, left: 14, fontSize: '1rem', fontWeight: 700, color: 'var(--text-muted)', userSelect: 'none' }}>
-          {SEASON_LABELS[selectedSeason]}
-        </div>
-        {recommended && (
-          <div style={{ position: 'absolute', top: 12, right: 14, background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: '999px', padding: '3px 10px', fontSize: '0.72rem', fontWeight: 700, color: accentColor }}>
-            {toDisplayScore(recommendationList[selectedRecIndex]?.score ?? 0)}점
-          </div>
-        )}
-        <Avatar gender={selectedGender} mode={outfitMode} colors={recommended ?? outfit} />
-      </div>
-
       {/* Color picker panel */}
       <div className="glass-panel" style={{ padding: '20px 14px' }}>
         <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '20px', paddingLeft: '2px' }}>
@@ -864,30 +851,124 @@ const Coordinator: React.FC = () => {
         <div style={{ marginTop: '20px' }}>
           <div style={{
             marginBottom: '12px',
-            padding: '12px 14px',
-            borderRadius: '12px',
+            padding: '14px 16px',
+            borderRadius: '14px',
             border: '1px solid var(--glass-border)',
             background: 'var(--glass-bg)',
           }}>
-            <div className="flex items-center justify-between gap-2" style={{ marginBottom: '8px' }}>
-              <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-main)' }}>
+            <div className="flex items-center justify-between gap-2" style={{ marginBottom: '12px' }}>
+              <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)' }}>
                 점수 커트라인
               </span>
-              <span style={{ fontSize: '0.75rem', color: accentColor, fontWeight: 700 }}>
-                {scoreThreshold}점 이상만 표시
+              <span style={{
+                fontSize: '0.95rem',
+                color: accentColor,
+                fontWeight: 800,
+                padding: '4px 10px',
+                background: 'var(--glass-bg-strong)',
+                borderRadius: '999px',
+                minWidth: '54px',
+                textAlign: 'center',
+              }}>
+                {scoreThreshold}점
               </span>
             </div>
-            <input
-              className="input-field"
-              type="number"
-              min={80}
-              max={99}
-              step={1}
-              value={scoreThreshold}
-              onChange={e => handleScoreThresholdChange(e.target.value)}
-              aria-label="점수 커트라인"
-              style={{ padding: '10px 14px', fontSize: '0.92rem' }}
-            />
+
+            {/* Stepper + slider for mobile-friendly input */}
+            <div className="flex items-center gap-3" style={{ marginBottom: '10px' }}>
+              <button
+                type="button"
+                onClick={() => handleScoreThresholdChange(String(scoreThreshold - 1))}
+                disabled={scoreThreshold <= 80}
+                aria-label="1점 낮추기"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '12px',
+                  border: '1px solid var(--glass-border-strong)',
+                  background: 'var(--glass-bg-strong)',
+                  color: 'var(--text-main)',
+                  fontSize: '1.4rem',
+                  fontWeight: 700,
+                  cursor: scoreThreshold <= 80 ? 'not-allowed' : 'pointer',
+                  opacity: scoreThreshold <= 80 ? 0.4 : 1,
+                  flexShrink: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                −
+              </button>
+              <input
+                type="range"
+                min={80}
+                max={99}
+                step={1}
+                value={scoreThreshold}
+                onChange={e => handleScoreThresholdChange(e.target.value)}
+                aria-label="점수 커트라인 슬라이더"
+                style={{
+                  flex: 1,
+                  height: '8px',
+                  appearance: 'none',
+                  WebkitAppearance: 'none',
+                  background: `linear-gradient(to right, var(--primary) 0%, var(--primary) ${((scoreThreshold - 80) / 19) * 100}%, var(--glass-bg-strong) ${((scoreThreshold - 80) / 19) * 100}%, var(--glass-bg-strong) 100%)`,
+                  borderRadius: '999px',
+                  outline: 'none',
+                }}
+                className="score-slider"
+              />
+              <button
+                type="button"
+                onClick={() => handleScoreThresholdChange(String(scoreThreshold + 1))}
+                disabled={scoreThreshold >= 99}
+                aria-label="1점 올리기"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '12px',
+                  border: '1px solid var(--glass-border-strong)',
+                  background: 'var(--glass-bg-strong)',
+                  color: 'var(--text-main)',
+                  fontSize: '1.4rem',
+                  fontWeight: 700,
+                  cursor: scoreThreshold >= 99 ? 'not-allowed' : 'pointer',
+                  opacity: scoreThreshold >= 99 ? 0.4 : 1,
+                  flexShrink: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                +
+              </button>
+            </div>
+
+            {/* Quick presets */}
+            <div className="flex gap-2" style={{ marginTop: '6px' }}>
+              {[80, 85, 90, 95].map(v => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => handleScoreThresholdChange(String(v))}
+                  style={{
+                    flex: 1,
+                    padding: '8px 4px',
+                    borderRadius: '10px',
+                    border: scoreThreshold === v ? `1.5px solid ${accentColor}` : '1px solid var(--glass-border)',
+                    background: scoreThreshold === v ? 'var(--gradient-soft)' : 'transparent',
+                    color: scoreThreshold === v ? 'var(--text-main)' : 'var(--text-muted)',
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    transition: 'all 0.18s ease',
+                  }}
+                >
+                  {v}점
+                </button>
+              ))}
+            </div>
           </div>
           <button
             className="btn"
