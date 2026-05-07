@@ -24,7 +24,7 @@ type NoticeType = 'none' | 'fallback' | 'clash';
 const COLOR_NAMES: Record<string, string> = {
   black: '블랙', white: '화이트', gray: '그레이', navy: '네이비',
   beige: '베이지', blue: '블루', 'light-blue': '연한블루', red: '레드',
-  green: '그린', brown: '브라운', yellow: '옐로우', pink: '핑크',
+  green: '그린', 'forest-green': '딥그린', brown: '브라운', yellow: '옐로우', pink: '핑크',
   khaki: '카키', olive: '올리브',
   'light-denim': '연청 데님', denim: '중청 데님',
   'dark-denim': '진청 데님', 'black-denim': '흑청 데님',

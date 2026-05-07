@@ -2,8 +2,8 @@
 
 // Available colors in the app
 export const availableColors = [
-  'black', 'white', 'gray', 'navy', 'beige', 
-  'blue', 'light-blue', 'red', 'green', 'brown', 'yellow', 'pink', 'khaki', 'olive',
+  'black', 'white', 'gray', 'navy', 'beige',
+  'blue', 'light-blue', 'red', 'green', 'forest-green', 'brown', 'yellow', 'pink', 'khaki', 'olive',
   'light-denim', 'denim', 'dark-denim', 'black-denim'
 ];
 
@@ -817,6 +817,43 @@ export const colorHarmonyDatabase: ColorRule[] = [
     gender: 'female', mode: 'one-piece', seasons: ['spring-fall', 'summer'],
     dress: ["white"],
     outerwear: ["denim", "light-denim", "none", "beige"]
+  },
+
+  // ── Added: 딥그린 자켓 활용 ──
+  {
+    name: "🌲 딥그린 자켓 어반 룩", description: "진한 딥그린 자켓과 뉴트럴 톤 이너를 매치해 차분하면서 깊이감 있는 어반 룩을 완성합니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'winter'],
+    top: ["white", "beige", "gray", "black", "light-blue"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid', 'stripe'],
+    bottom: ["beige", "khaki", "black", "gray", "denim", "dark-denim", "black-denim"],
+    outerwear: ["forest-green"]
+  },
+  {
+    name: "🪖 딥그린 밀리터리 헤리티지", description: "딥그린 아우터에 어스 톤을 매치한 견고한 밀리터리 무드의 클래식 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'winter'],
+    top: ["beige", "white", "khaki", "olive", "brown"], topTypes: ['shirt', 'knit', 't-shirt'], topPatterns: ['solid', 'check'],
+    bottom: ["khaki", "olive", "beige", "brown", "denim", "dark-denim"],
+    outerwear: ["forest-green"]
+  },
+  {
+    name: "🌲 딥그린 + 데님 캐주얼", description: "딥그린 자켓과 데님 하의의 자연스러운 조합. 가을·겨울 데일리에 딱 맞는 무난한 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'winter'],
+    top: ["white", "gray", "black", "beige"], topTypes: ['t-shirt', 'shirt', 'knit'], topPatterns: ['solid'],
+    bottom: ["denim", "light-denim", "dark-denim", "black-denim"],
+    outerwear: ["forest-green"]
+  },
+  {
+    name: "🍂 딥그린 어스톤 레이어드", description: "딥그린·브라운·베이지의 어스 팔레트를 레이어드한 따뜻하고 빈티지한 가을 룩입니다.",
+    gender: 'unisex', mode: 'two-piece', seasons: ['spring-fall', 'winter'],
+    top: ["beige", "brown", "white"], topTypes: ['knit', 'shirt'], topPatterns: ['solid'],
+    bottom: ["brown", "beige", "khaki", "dark-denim"],
+    outerwear: ["forest-green", "brown", "brown-leather"]
+  },
+  {
+    name: "🌲 딥그린 코트 우먼", description: "딥그린 코트와 깔끔한 이너로 완성하는 차분하고 클래식한 여성 룩입니다.",
+    gender: 'female', mode: 'two-piece', seasons: ['winter', 'spring-fall'],
+    top: ["white", "black", "beige", "gray"], topTypes: ['knit', 'shirt'], topPatterns: ['solid'],
+    bottom: ["black", "beige", "gray", "denim", "dark-denim"],
+    outerwear: ["forest-green"]
   }
 ];
 
@@ -831,6 +868,7 @@ export const getColorHex = (colorName: string) => {
       'light-blue': '#93c5fd',
     red: '#ef4444',
     green: '#10b981',
+    'forest-green': '#1f4d2c',
     brown: '#78350f',
     yellow: '#eab308',
     pink: '#ec4899',
